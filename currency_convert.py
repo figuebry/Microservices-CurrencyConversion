@@ -1,16 +1,21 @@
-
 from flask import Flask, request, jsonify
+import requests # markeeta addded
 
 app = Flask(__name__)
 
-exchange_rates = {
-    ("USD", "EUR"): 0.92,
-    ("EUR", "USD"): 1.09,
-    ("USD", "GBP"): 0.79,
-    ("GBP", "USD"): 1.27,
-    ("USD", "CAD"): 1.40,
-    ("CAD", "USD"): 0.71
-}
+
+# markeeta addded
+def get_exchange_rate(from_currency, to_currency):
+    url = f"https://api.frankfurter.dev/v2/rate/{from_currency}/{to_currency}"
+
+    try:
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+
+        return response.json()["rate"]
+
+    except (requests.exceptions.RequestException, ValueError, KeyError, TypeError):
+        return None
 
 
 @app.route("/convert", methods=["POST"])
@@ -34,22 +39,25 @@ def convert_currency():
             "message": "Both currencies are required"
         }), 400
 
-    conversion = (from_currency.upper(), to_currency.upper())
+    conversion = f"{from_currency.upper()}_{to_currency.upper()}"
 
-    if conversion not in exchange_rates:
+    # markeeta addded
+    current_rate = get_exchange_rate(from_currency.upper(), to_currency.upper())
+
+    if current_rate is None:
         return jsonify({
             "status": "error",
-            "message": "Currency conversion not supported"
-        }), 400
+            "message": "Unable to retrieve current exchange rate"
+        }), 503
 
-    converted_amount = amount * exchange_rates[conversion]
+    converted_amount = amount * current_rate
 
     return jsonify({
         "status": "success",
         "original_amount": amount,
         "from_currency": from_currency.upper(),
         "to_currency": to_currency.upper(),
-        "exchange_rate": exchange_rates[conversion],
+        "exchange_rate": current_rate,
         "converted_amount": round(converted_amount, 2)
     })
 
