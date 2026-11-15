@@ -124,6 +124,9 @@ Possible error responses include:
 
 The following diagram illustrates how a requesting application communicates with the Currency Converter microservice.
 
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/8075fad7-f580-44ce-85d5-872a9a3fd3d3" />
+
+
 ## Running the Microservice
 
 Install Flask if it is not already installed:
