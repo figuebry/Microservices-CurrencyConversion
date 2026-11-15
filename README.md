@@ -152,3 +152,7 @@ The service will run locally on port `5002`.
 - Python 3
 - Flask
 - Requests (required by applications communicating with this service, not by the microservice itself)
+
+## Authors
+
+Bryan Figueroa, Markeeta Whitfield
