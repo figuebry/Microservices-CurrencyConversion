@@ -4,14 +4,7 @@
 
 The Currency Converter microservice accepts an amount and two currency codes, then returns the converted amount using predefined exchange rates.
 
-The service currently supports six conversions:
-
-- USD to EUR
-- EUR to USD
-- USD to GBP
-- GBP to USD
-- USD to CAD
-- CAD to USD
+The service currently supports any valid currency, as it utilizes the Frankfurter API for live rates.
 
 Exchange rates are hardcoded and are not updated automatically.
 
